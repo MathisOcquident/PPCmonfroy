@@ -15,6 +15,53 @@ function pla(i,j,k)
 	return i + g*(j-1) + w*g*(k-1)
 end  
 
+function printar(ii,jj,i,k,ar)
+	print(i)
+	for j in 1:k
+		print(" ",ar[j])
+	end
+	println(" 0")
+end
+
+function writear(f,ii,jj,cpt,i,k,ar)
+	write(f,string(cpt+i-1))
+	for j in 1:k
+		write(f,string(" ",pla(ii,jj,ar[j])))
+	end
+	write(f," 0\n")
+end
+function writearneg(f,ii,jj,cpt,i,k,ar)
+	write(f,string(cpt+i-1))
+	for j in 1:k
+		write(f,string(" -",pla(ii,jj,ar[j])))
+	end
+	write(f," 0\n")
+end
+
+function enumar(f,ii,jj,cpt,k,n,sign)
+	ar = collect(1:k)
+	writear(f,ii,jj,cpt,1,k,ar)
+	for i in 2:binomial(n,k)
+		ii = 0
+		while ii<k
+			if ar[end-ii] + 1<=n-ii
+				ar[end-ii] = ar[end-ii] + 1
+				for iii in k-ii+1:k
+					ar[iii] = ar[iii-1]+1
+				end
+				ii = k
+			else 
+				ii = ii + 1
+			end
+		end
+		if sign
+			writear(f,ii,jj,cpt,i,k,ar)
+		else
+			writearneg(f,ii,jj,cpt,i,k,ar)
+		end
+	end
+end
+
 function sat(w,g,p,q)
 	cpt = 1
 	open("testsat.txt","w") do f
@@ -36,6 +83,7 @@ function sat(w,g,p,q)
 				if jj != j
 					for k in 1:q
 						write(f,string(cpt," -",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
+						cpt = cpt + 1
 					end
 				end
 			end
@@ -43,6 +91,18 @@ function sat(w,g,p,q)
 	end
 
 	# ctr 2
+	for ii in 1:w
+		for jj in 1:g
+			enumar(f,ii,jj,cpt,q-p+1,q,true)
+			cpt = cpt + binomial(q,q-p+1)
+		end
+	end
+	for ii in 1:w
+		for jj in 1:g
+			enumar(f,ii,jj,cpt,p+1,q,false)
+			cpt = cpt + binomial(q,p+1)
+		end
+	end
 
 	# ctr 3
 	for k in 1:q
