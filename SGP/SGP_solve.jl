@@ -18,7 +18,7 @@ function Base.show(io::IO, var::Variable)
     println("Variable :")
     println("\tmin : ", var.min)
     println("\tmax : ", var.max)
-    println("\t", var.card_min, " <= Cardinal <= ", var.card_max)
+    print("\t", var.card_min, " <= Cardinal <= ", var.card_max)
 end
 
 # Vérifie si la variable reste valide, ie qu'il reste des solutions possibles.
@@ -38,6 +38,14 @@ function verifie_clot(var::Variable)
     clot = clot || length(var.min) == var.card_max
     var.est_clot = clot
     return clot
+end
+
+# Vérifie si la variable est vide.
+function est_vide(var::Variable)
+    vide = false
+    if length(var.max) == 0 vide = true end
+    if var.car_max == 0 vide = true end
+    return vide
 end
 
 # on filtre la contrainte : (var1 inter var2) = emptyset
@@ -73,7 +81,7 @@ function test_clot(var::Variable, varName::String = "var")
     println(varName, " ", verifie_clot(var) ? "est clot." : "n'est pas clot.")
 end
 
-function test_filtrage_intersection_vide(var1::Variable, var2::Variable, Univers)
+function test_filtrage_intersection_vide(var1::Variable, var2::Variable, Univers::Set)
     println("---------------------------------------")
     println("Test de la contrainte intersection vide")
     println("---------------------------------------")
