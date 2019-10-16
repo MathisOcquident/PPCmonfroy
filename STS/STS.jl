@@ -28,5 +28,3 @@ for i in 1:n-1
 		println("    Match ",j,"  ",x[i,j,:])
 	end
 end
-
-sduyfgduygfuisqufdjgsdeyfgcuyjsqgfdjgdsufgceydsfkuyi
