@@ -64,7 +64,7 @@ end
 
 function sat(w,g,p,q)
 	cpt = 1
-	open("testsat.txt","w") do f
+	open("satsgp.cnf","w") do f
 	# ctr 1
 	for i in 1:w
 		for k in 1:q

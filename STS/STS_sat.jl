@@ -13,10 +13,13 @@ q = n
 function pla(i,j,k)
 	return i + g*(j-1) + w*g*(k-1)
 end  
+function zpla(i,j,k,kk)
+	return pla(w,g,n) + i + g*(j-1) + w*g*(k-1) + w*g*w*g*(kk-1)
+end 
 
 function sat(w,g,q)
 	cpt = 1
-	open("testsat.txt","w") do f
+	open("satsts.cnf","w") do f
 	# ctr 1
 	for i in 1:w
 		for j in 1:g
@@ -84,26 +87,47 @@ function sat(w,g,q)
 	end
 
 	# ctr 4
-	for k in 1:q-1
-		for kk in k+1:q
-			for i in 1:w
-				for ii in 1:w
-					for j in 1:g
-						for jj in 1:g
-							if jj != j || ii != i
-								write(f,string(cpt," -",pla(i,j,k)," -",pla(ii,jj,k)," 0\n"))
-								cpt = cpt + 1
-								write(f,string(cpt," -",pla(i,j,k)," -",pla(ii,jj,kk)," 0\n"))
-								cpt = cpt + 1
-								write(f,string(cpt," -",pla(i,j,kk)," -",pla(ii,jj,k)," 0\n"))
-								cpt = cpt + 1
-								write(f,string(cpt," -",pla(i,j,kk)," -",pla(ii,jj,kk)," 0\n"))
-								cpt = cpt + 1
-							end
-						end
-					end
+	for i in 1:w
+		for j in 1:g
+			for k in 1:n-1
+				for kk in k+1:n
+					write(f,string(cpt," ",zpla(i,j,k,kk)," -",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
+					cpt = cpt + 1
 				end
 			end
+		end
+	end
+	for i in 1:w
+		for j in 1:g
+			for k in 1:n-1
+				for kk in k+1:n
+					write(f,string(cpt," -",zpla(i,j,k,kk)," ",pla(i,j,k)," 0\n"))
+					cpt = cpt + 1
+				end
+			end
+		end
+	end
+	for i in 1:w
+		for j in 1:g
+			for k in 1:n-1
+				for kk in k+1:n
+					write(f,string(cpt," -",zpla(i,j,k,kk)," ",pla(i,j,kk)," 0\n"))
+					cpt = cpt + 1
+				end
+			end
+		end
+	end
+	for i in 1:w
+		for j in 1:g
+			s = string(cpt)
+			cpt = cpt + 1
+			for k in 1:n-1
+				for kk in k+1:n
+					s = s*" "*string(zpla(i,j,k,kk))
+				end
+			end
+			s = s*" 0"
+			write(f,s*"\n")
 		end
 	end
 	end
