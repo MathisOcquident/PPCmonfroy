@@ -1,4 +1,8 @@
 
+#==============================================================================#
+#============================== Variable ======================================#
+#==============================================================================#
+
 # Une variable contient deux ensembles, et deux entiers
 mutable struct Variable
     min::Set{Int64}
@@ -8,9 +12,32 @@ mutable struct Variable
     est_clot::Bool
 end
 
+# Fait l'intersection la plus large des variables
+function intersect(var::Variable, var::Variable)
+    min = intersect(var1.min, var2.min)
+    max = intersect(var1.max, var2.max) # On ne peut pas trouver moins large
+    card_min = length(min)
+    max = length(max)
+    return generer_Variable(min, max, card_min, card_max)
+end
+
 function generer_Variable(min::Set{Int64}, max::Set{Int64},
     card_min::Int64, card_max::Int64, est_clot::Bool = false)
     return Variable(Set{Int64}(min), Set{Int64}(max), card_min, card_max, est_clot)
+end
+
+# Génère une variable vide
+function generer_Variable_Vide()
+    return Variable(Set{Int64}(), Set{Int64}(), 0, 0, true)
+end
+
+# Fixe une variable à une veleur.
+function fixer(var::Variable, valeur::Set{Int})
+    var.min = valeur
+    var.max = valeur
+    var.card_min = length(valeur)
+    var.card_max = var.card_min
+    var.est_clot = true
 end
 
 # On modifie le print lors d'un print(var::Variable) ou d'un println(var::Variable)
@@ -60,9 +87,19 @@ function filtrage_intersection_vide(var1::Variable, var2::Variable, Univers::Set
     end
 end
 
-function filtrage_card_intersection(var1::Variable, var2::Variable)
+function filtrage_card_intersection_1(var1::Variable, var2::Variable)
     # TODO :
 end
+
+#==============================================================================#
+#================================ Contrainte ==================================#
+#==============================================================================#
+
+struct Contrainte
+    liste_argument::Array{Variable, 1}
+    filtrage!::Fonction
+end
+
 
 
 #==============================================================================#
