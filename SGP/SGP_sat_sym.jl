@@ -74,10 +74,12 @@ function sat(w,g,p,q)
 		end
 	end
 	for i in 1:w
-		for j in 1:g-1
-			for jj in j+1:g
-				for k in 1:q
-					write(f,string("-",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
+		for j in 1:g
+			for jj in 1:g
+				if jj != j
+					for k in 1:q
+						write(f,string("-",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
+					end
 				end
 			end
 		end
@@ -96,14 +98,16 @@ function sat(w,g,p,q)
 	end
 
 	# ctr 3
-	for k in 1:q-1
-		for kk in k+1:q
-			for i in 1:w
-				for ii in 1:w
-					for j in 1:g
-						for jj in 1:g
-							if jj != j || ii!=j
-								write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
+	for k in 1:q
+		for kk in 1:q
+			if kk != k
+				for i in 1:w
+					for ii in 1:w
+						for j in 1:g
+							for jj in 1:g
+								if jj != j || ii!=j
+									write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
+								end
 							end
 						end
 					end
