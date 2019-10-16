@@ -1,7 +1,7 @@
 using JuMP, GLPK, MathOptInterface, LinearAlgebra, Gurobi#, CPLEX
 function IP(n)
 	m = Model(with_optimizer(Gurobi.Optimizer))
-	
+
 	@variable(m,x[1:n-1,1:div(n,2),1:n], binary=true)
 	@variable(m,z[1:n-1,1:div(n,2),1:n,1:n], binary=true)
 
@@ -28,4 +28,3 @@ for i in 1:n-1
 		println("    Match ",j,"  ",x[i,j,:])
 	end
 end
-
