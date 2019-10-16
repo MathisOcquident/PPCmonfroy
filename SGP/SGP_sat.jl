@@ -23,24 +23,22 @@ function printar(ii,jj,i,k,ar)
 	println(" 0")
 end
 
-function writear(f,ii,jj,cpt,i,k,ar)
-	write(f,string(cpt+i-1))
+function writear(f,ii,jj,i,k,ar)
 	for j in 1:k
-		write(f,string(" ",pla(ii,jj,ar[j])))
+		write(f,string(pla(ii,jj,ar[j])," "))
 	end
-	write(f," 0\n")
+	write(f,"0\n")
 end
-function writearneg(f,ii,jj,cpt,i,k,ar)
-	write(f,string(cpt+i-1))
+function writearneg(f,ii,jj,i,k,ar)
 	for j in 1:k
-		write(f,string(" -",pla(ii,jj,ar[j])))
+		write(f,string("-",pla(ii,jj,ar[j])," "))
 	end
-	write(f," 0\n")
+	write(f,"0\n")
 end
 
-function enumar(f,ii,jj,cpt,k,n,sign)
+function enumar(f,ii,jj,k,n,sign)
 	ar = collect(1:k)
-	writear(f,ii,jj,cpt,1,k,ar)
+	writear(f,ii,jj,1,k,ar)
 	for i in 2:binomial(n,k)
 		ii = 0
 		while ii<k
@@ -55,25 +53,23 @@ function enumar(f,ii,jj,cpt,k,n,sign)
 			end
 		end
 		if sign
-			writear(f,ii,jj,cpt,i,k,ar)
+			writear(f,ii,jj,i,k,ar)
 		else
-			writearneg(f,ii,jj,cpt,i,k,ar)
+			writearneg(f,ii,jj,i,k,ar)
 		end
 	end
 end
 
 function sat(w,g,p,q)
-	cpt = 1
 	open("satsgp.cnf","w") do f
 	# ctr 1
 	for i in 1:w
 		for k in 1:q
-			s = string(cpt)
-			cpt = cpt + 1
+			s = ""
 			for j in 1:g
-				s = s*" "*string(pla(i,j,k))
+				s = s*string(pla(i,j,k)," ")
 			end
-			s = s*" 0"
+			s = s*"0"
 			write(f,s*"\n")
 		end
 	end
@@ -82,8 +78,7 @@ function sat(w,g,p,q)
 			for jj in 1:g
 				if jj != j
 					for k in 1:q
-						write(f,string(cpt," -",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
-						cpt = cpt + 1
+						write(f,string("-",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
 					end
 				end
 			end
@@ -93,14 +88,12 @@ function sat(w,g,p,q)
 	# ctr 2
 	for ii in 1:w
 		for jj in 1:g
-			enumar(f,ii,jj,cpt,q-p+1,q,true)
-			cpt = cpt + binomial(q,q-p+1)
+			enumar(f,ii,jj,q-p+1,q,true)
 		end
 	end
 	for ii in 1:w
 		for jj in 1:g
-			enumar(f,ii,jj,cpt,p+1,q,false)
-			cpt = cpt + binomial(q,p+1)
+			enumar(f,ii,jj,p+1,q,false)
 		end
 	end
 
@@ -113,8 +106,7 @@ function sat(w,g,p,q)
 						for j in 1:g
 							for jj in 1:g
 								if jj != j || ii!=j
-									write(f,string(cpt," -",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
-									cpt = cpt + 1
+									write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
 								end
 							end
 						end

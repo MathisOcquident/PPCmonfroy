@@ -5,7 +5,7 @@
 #1 -3 0 # x1 et non x3 0 veut dire fin de ligne
 #2 3 -1 0
 
-n = 4
+n = 6
 w = n-1
 g = div(n,2)
 q = n
@@ -18,20 +18,18 @@ function zpla(i,j,k,kk)
 end 
 
 function sat(w,g,q)
-	cpt = 1
 	open("satsts.cnf","w") do f
 	# ctr 1
 	for i in 1:w
 		for j in 1:g
 			for kk in 1:q
-				s = string(cpt)
-				cpt = cpt + 1
+				s = ""
 				for k in 1:q
 					if k != kk
-						s = s*" "*string(pla(i,j,k))
+						s = s*string(pla(i,j,k)," ")
 					end
 				end
-				s = s*" 0"
+				s = s*"0"
 				write(f,s*"\n")	
 			end
 		end
@@ -41,8 +39,7 @@ function sat(w,g,q)
 			for k in 1:q-2
 				for kk in k+1:q-1
 					for kkk in kk+1:q
-						write(f,string(cpt," -",pla(i,j,k)," -",pla(i,j,kk)," -",pla(i,j,kkk)," 0\n"))
-						cpt = cpt + 1
+						write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(i,j,kkk)," 0\n"))
 					end
 				end
 			end
@@ -52,8 +49,7 @@ function sat(w,g,q)
 	# ctr 2
 	for i in 1:w
 		for j in 1:g
-			s = string(cpt)
-			cpt = cpt + 1
+			s = ""
 			for k in 1:q
 				s = s*" "*string(pla(i,j,k))
 			end
@@ -65,8 +61,7 @@ function sat(w,g,q)
 		for j in 1:g
 			for k in 1:q-1
 				for kk in k+1:q
-					write(f,string(cpt," -",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
-					cpt = cpt + 1
+					write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
 				end
 			end
 		end
@@ -78,8 +73,7 @@ function sat(w,g,q)
 			for i in 1:w-2
 				for ii in i+1:w-1
 					for iii in ii+1:w
-						write(f,string(cpt," -",pla(i,j,k)," -",pla(ii,j,k)," -",pla(iii,j,k)," 0\n"))
-						cpt = cpt + 1
+						write(f,string("-",pla(i,j,k)," -",pla(ii,j,k)," -",pla(iii,j,k)," 0\n"))
 					end
 				end
 			end
@@ -91,8 +85,7 @@ function sat(w,g,q)
 		for j in 1:g
 			for k in 1:n-1
 				for kk in k+1:n
-					write(f,string(cpt," ",zpla(i,j,k,kk)," -",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
-					cpt = cpt + 1
+					write(f,string(zpla(i,j,k,kk)," -",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
 				end
 			end
 		end
@@ -101,8 +94,7 @@ function sat(w,g,q)
 		for j in 1:g
 			for k in 1:n-1
 				for kk in k+1:n
-					write(f,string(cpt," -",zpla(i,j,k,kk)," ",pla(i,j,k)," 0\n"))
-					cpt = cpt + 1
+					write(f,string("-",zpla(i,j,k,kk)," ",pla(i,j,k)," 0\n"))
 				end
 			end
 		end
@@ -111,22 +103,20 @@ function sat(w,g,q)
 		for j in 1:g
 			for k in 1:n-1
 				for kk in k+1:n
-					write(f,string(cpt," -",zpla(i,j,k,kk)," ",pla(i,j,kk)," 0\n"))
-					cpt = cpt + 1
+					write(f,string("-",zpla(i,j,k,kk)," ",pla(i,j,kk)," 0\n"))
 				end
 			end
 		end
 	end
 	for i in 1:w
 		for j in 1:g
-			s = string(cpt)
-			cpt = cpt + 1
+			s = ""
 			for k in 1:n-1
 				for kk in k+1:n
-					s = s*" "*string(zpla(i,j,k,kk))
+					s = s*string(zpla(i,j,k,kk)," ")
 				end
 			end
-			s = s*" 0"
+			s = s*"0"
 			write(f,s*"\n")
 		end
 	end
