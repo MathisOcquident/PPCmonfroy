@@ -5,7 +5,7 @@
 #1 -3 0 # x1 et non x3 0 veut dire fin de ligne
 #2 3 -1 0
 
-n = 6
+n = 4
 w = n-1
 g = div(n,2)
 q = n
@@ -14,7 +14,7 @@ function pla(i,j,k)
 	return i + g*(j-1) + w*g*(k-1)
 end  
 function zpla(i,j,k,kk)
-	return pla(w,g,n) + i + g*(j-1) + w*g*(k-1) + w*g*w*g*(kk-1)
+	return pla(w,g,q) + i + g*(j-1) + w*g*(k-1) + w*g*w*g*(kk-1)
 end 
 
 function sat(w,g,q)
@@ -29,8 +29,7 @@ function sat(w,g,q)
 						s = s*string(pla(i,j,k)," ")
 					end
 				end
-				s = s*"0"
-				write(f,s*"\n")	
+				write(f,s*"0\n")	
 			end
 		end
 	end
@@ -48,20 +47,19 @@ function sat(w,g,q)
 
 	# ctr 2
 	for i in 1:w
-		for j in 1:g
+		for k in 1:q
 			s = ""
-			for k in 1:q
-				s = s*" "*string(pla(i,j,k))
+			for j in 1:g
+				s = s*string(pla(i,j,k)," ")
 			end
-			s = s*" 0"
-			write(f,s*"\n")
+			write(f,s*"0\n")
 		end
 	end
 	for i in 1:w
-		for j in 1:g
-			for k in 1:q-1
-				for kk in k+1:q
-					write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
+		for k in 1:q
+			for j in 1:g-1
+				for jj in j+1:g
+					write(f,string("-",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
 				end
 			end
 		end
@@ -83,8 +81,8 @@ function sat(w,g,q)
 	# ctr 4
 	for i in 1:w
 		for j in 1:g
-			for k in 1:n-1
-				for kk in k+1:n
+			for k in 1:q-1
+				for kk in k+1:q
 					write(f,string(zpla(i,j,k,kk)," -",pla(i,j,k)," -",pla(i,j,kk)," 0\n"))
 				end
 			end
@@ -92,8 +90,8 @@ function sat(w,g,q)
 	end
 	for i in 1:w
 		for j in 1:g
-			for k in 1:n-1
-				for kk in k+1:n
+			for k in 1:q-1
+				for kk in k+1:q
 					write(f,string("-",zpla(i,j,k,kk)," ",pla(i,j,k)," 0\n"))
 				end
 			end
@@ -101,8 +99,8 @@ function sat(w,g,q)
 	end
 	for i in 1:w
 		for j in 1:g
-			for k in 1:n-1
-				for kk in k+1:n
+			for k in 1:q-1
+				for kk in k+1:q
 					write(f,string("-",zpla(i,j,k,kk)," ",pla(i,j,kk)," 0\n"))
 				end
 			end
@@ -111,13 +109,12 @@ function sat(w,g,q)
 	for i in 1:w
 		for j in 1:g
 			s = ""
-			for k in 1:n-1
-				for kk in k+1:n
+			for k in 1:q-1
+				for kk in k+1:q
 					s = s*string(zpla(i,j,k,kk)," ")
 				end
 			end
-			s = s*"0"
-			write(f,s*"\n")
+			write(f,s*"0\n")
 		end
 	end
 	end
