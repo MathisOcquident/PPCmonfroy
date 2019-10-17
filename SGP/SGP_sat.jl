@@ -36,9 +36,9 @@ function writearneg(f,ii,jj,i,k,ar)
 	write(f,"0\n")
 end
 
-function enumar(f,ii,jj,k,n,sign)
+function enumar(f,ii1,jj,k,n,sign)
 	ar = collect(1:k)
-	writear(f,ii,jj,1,k,ar)
+	writear(f,ii1,jj,1,k,ar)
 	for i in 2:binomial(n,k)
 		ii = 0
 		while ii<k
@@ -53,9 +53,9 @@ function enumar(f,ii,jj,k,n,sign)
 			end
 		end
 		if sign
-			writear(f,ii,jj,i,k,ar)
+			writear(f,ii1,jj,i,k,ar)
 		else
-			writearneg(f,ii,jj,i,k,ar)
+			writearneg(f,ii1,jj,i,k,ar)
 		end
 	end
 end
@@ -102,7 +102,7 @@ function sat(w,g,p,q)
 				for ii in 1:w
 					for j in 1:g
 						for jj in 1:g
-							if jj != j || ii!=j
+							if jj != j || ii!=i
 								write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
 							end
 						end
