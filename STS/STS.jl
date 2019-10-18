@@ -13,18 +13,24 @@ function IP(n)
 	return m
 end
 
-n = 6
+function main(n::Int=6)
+	println("n = ", n)
+	m = IP(n)
 
-m = IP(n)
+	optimize!(m)
+	term = termination_status(m)
+	println(term)
 
-optimize!(m)
-println(termination_status(m))
+	if term == MathOptInterface.OPTIMAL
+		x = value.(m[:x])
 
-x = value.(m[:x])
-
-for i in 1:n-1
-	println("Semaine ",i)
-	for j in 1:div(n,2)
-		println("    Match ",j,"  ",x[i,j,:])
+		for i in 1:n-1
+			println("Semaine ",i)
+			for j in 1:div(n,2)
+				println("    Match ",j,"  ",x[i,j,:])
+			end
+		end
 	end
 end
+
+main(4)
