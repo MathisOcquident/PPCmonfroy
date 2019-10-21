@@ -5,7 +5,7 @@
 #1 -3 0 # x1 et non x3 0 veut dire fin de ligne
 #2 3 -1 0
 
-n = 4
+n = 6
 w = n-1
 g = div(n,2)
 q = n
