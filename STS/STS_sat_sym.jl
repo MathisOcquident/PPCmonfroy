@@ -11,10 +11,10 @@ g = div(n,2)
 q = n
 
 function pla(i,j,k)
-	return i + g*(j-1) + w*g*(k-1)
+	return i + w*(j-1) + w*g*(k-1)
 end  
 function zpla(i,j,k,kk)
-	return i + g*(j-1) + w*g*(k-1) + w*g*w*g*(kk-1) + pla(w,g,q) 
+	return i + w*(j-1) + w*g*(k-1) + w*g*w*g*(kk-1) + pla(w,g,q) 
 end 
 
 function sat(w,g,q)

@@ -22,7 +22,7 @@ end
 
 function interpret()
 	x = zeros(Int,w,g,q)
-	ss = Vector{Int}(undef,zpla(w,g,q-1,q)+1)
+	ss = Vector{Int}(undef,pla(w,g,q)+1)
 	open("res.out") do f
 		s = readlines(f)
 		println(s[1])
