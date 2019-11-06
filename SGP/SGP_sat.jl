@@ -6,13 +6,13 @@
 #2 3 -1 0
 
 
-w = 4
-g = 4
-p = 4
-q = 16
+w = 7
+g = 5
+p = 3
+q = 15
 
 function pla(i,j,k)
-	return i + g*(j-1) + w*g*(k-1)
+	return i + w*(j-1) + w*g*(k-1)
 end  
 
 function printar(ii,jj,i,k,ar)

@@ -12,7 +12,7 @@ p = 4
 q = 16
 
 function pla(i,j,k)
-	return i + g*(j-1) + w*g*(k-1)
+	return i + w*(j-1) + w*g*(k-1)
 end  
 
 function printar(ii,jj,i,k,ar)
