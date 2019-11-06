@@ -87,7 +87,7 @@ function filtrage_intersection_vide(var1::Variable, var2::Variable, Univers::Set
     end
 end
 
-function filtrage_card_intersection_1(var1::Variable, var2::Variable)
+function filtrage_card_intersection_inferieur_1(var1::Variable, var2::Variable)
     # TODO :
 end
 
