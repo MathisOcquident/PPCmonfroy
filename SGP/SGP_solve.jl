@@ -34,10 +34,6 @@ function generer_random_id(taille::Int)
     return str
 end
 
-function egal_id(var1::Variable, var2::Variable)
-    return var1.id == var2.id
-end
-
 # Fait l'intersection la plus large des variables
 function intersection(var1::Variable, var2::Variable)
     min = intersect(var1.min, var2.min)
@@ -52,13 +48,19 @@ function generer_Variable_Vide()
     return Variable(Set{Int64}(), Set{Int64}(), 0, 0, true)
 end
 
-# Fixe une variable à une veleur.
-function fixer(var::Variable, valeur::Set{Int})
+function generer_Variable_fixe(valeur::Set{Int})
+    n = length(valeur)
+    return Variable(valeur, valeur, n, n, true)
+end
+
+# Fixe une variable à une valeur.
+function fixer!(var::Variable, valeur::Set{Int})
     var.min = valeur
     var.max = valeur
     var.card_min = length(valeur)
     var.card_max = var.card_min
     var.est_clot = true
+    return var
 end
 
 # On modifie le print lors d'un print(var::Variable) ou d'un println(var::Variable)
@@ -87,6 +89,16 @@ function Base.show(io::IO, var::Variable)
         show(io, var.id)
         print(io, ")")
     end
+end
+
+# Surcharge l'opérateur == pour faire var1 == var2
+function Base.:(==)(var1::Variable, var2::Variable)
+    egalite_min = (var1.min == var2.min)
+    egalite_max = (var1.max == var2.max)
+    egalite_card_min = (var1.card_min == var2.card_min)
+    egalite_card_max = (var1.card_max == var2.card_max)
+    egalite_id = (var1.id == var2.id)
+    return egalite_min && egalite_max && egalite_card_min && egalite_card_max && egalite_id
 end
 
 # Vérifie si la variable reste valide, ie qu'il reste des solutions possibles.
@@ -139,12 +151,13 @@ end
 #==============================================================================#
 
 struct Contrainte
-    liste_argument::Array{Variable, 1}
+    liste_arguments::Array{Variable, 1}
     filtrage!::Function
+    univers::Set{Int}
 end
 
-function filtrer(ctr::Contrainte, univers::Set)
-    ctr.filtrage!(liste_argument, univers)
+function filtrer!(ctr::Contrainte)
+    ctr.filtrage!(ctr.liste_arguments, ctr.univers)
 end
 
 function solver_generique(liste_contraintes::Array{Contrainte, 1}, liste_variables::Array{Variable, 1}, Univers::Set)
@@ -158,6 +171,18 @@ function solver_generique(liste_contraintes::Array{Contrainte, 1}, liste_variabl
     while !isempty(liste_filtrage_restant)
         index_ctr = pop!(liste_filtrage_restant)
         ctr = liste_contraintes[index_ctr]
+        arguments = deepcopy(ctr.liste_arguments)
+        filtrer!(ctr)
+        for var in ctr.liste_arguments
+            if !(var in arguments) && !verifie_clot(var) # A changer et n'est pas clot.
+                for index in dict_contrainte_variable[var.id]
+                    #Ne pas mettre plusieurs fois la même contrainte en attente.
+                    if !(index in liste_filtrage_restant)
+                        push!(liste_filtrage_restant, index)
+                    end
+                end
+            end
+        end
     end
 
 
