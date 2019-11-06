@@ -76,7 +76,8 @@ function est_vide(var::Variable)
 end
 
 # on filtre la contrainte : (var1 inter var2) = emptyset
-function filtrage_intersection_vide(var1::Variable, var2::Variable, Univers::Set)
+function filtrage_intersection_vide(liste_Variable::Array{Variable, 1}, Univers::Set)
+    var1, var2 = liste_Variable
     if (!var1.est_clot)
         setdiff!(var1.max, var2.min)
         var1.card_max = max(var1.card_max, length(setdiff( Univers, var2.min )) )
@@ -87,7 +88,8 @@ function filtrage_intersection_vide(var1::Variable, var2::Variable, Univers::Set
     end
 end
 
-function filtrage_card_intersection_inferieur_1(var1::Variable, var2::Variable)
+function filtrage_card_intersection_inferieur_1(liste_Variable::Array{Variable, 1}, Univers::Set)
+    var1, var2 = liste_Variable
     # TODO :
 end
 
@@ -100,6 +102,17 @@ struct Contrainte
     filtrage!::Fonction
 end
 
+function solver_generique(liste_contrainte::Array{Contrainte, 1}, liste_variable::Array{Variable, 1}, Univers::Set)
+    # Dictionnaire qui associe toutes les contraintes d'une variable à une variable
+    dict_contrainte_variable = Dict{Int, Array{Contrainte, 1}}()
+    for i in length(liste_variable)
+        var = liste_variable[i]
+        # TODO
+    end
+
+    liste_filtrage_restant = copy(liste_contrainte)
+
+end
 
 
 #==============================================================================#
@@ -110,6 +123,7 @@ Univers = Set((1, 2, 3, 4, 5, 6))
 v1 = generer_Variable(Set{Int64}((1, 2, 3)), Univers, 2, 4)
 v2 = generer_Variable(Set{Int64}((5, 6)), Univers, 2, 4)
 v3 = generer_Variable(Set{Int64}((3, 5, 6)), Univers, 2, 4)
+
 function test_validite(var::Variable, varName::String = "var")
     println(varName, " ", verifie_validite(var) ? "est valide." : "n'est pas valide.")
 end
@@ -124,7 +138,7 @@ function test_filtrage_intersection_vide(var1::Variable, var2::Variable, Univers
     println("---------------------------------------")
     print("var1 : ", var1, "var2 : ", var2)
     println("Filtrage (var1 inter var2) = emptySet.")
-    filtrage_intersection_vide(var1, var2, Univers)
+    filtrage_intersection_vide([var1, var2], Univers)
     print("var1 : ", var1, "var2 : ", var2)
     test_validite(var1, "var1")
     test_validite(var2, "var2")
