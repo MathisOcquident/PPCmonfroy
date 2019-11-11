@@ -155,16 +155,6 @@ function filtrage_individuel!(var::Variable, Univers::Set)
         nmax = length(var.max)
         nmin = length(var.min)
 
-        # Card min = taille de  Set max
-        if nmax == var.card_min
-            union!(var.min, var.max)
-        end
-
-        # Card maw = taille de  Set min
-        if nmin == var.card_max
-            intersect!(var.max, var.min)
-        end
-
         # card Max > taille de set Max
         if nmax < var.card_max
             var.card_max = nmax
@@ -173,6 +163,16 @@ function filtrage_individuel!(var::Variable, Univers::Set)
         # card Min < taille de set Min
         if nmin > var.card_min
             var.card_min = nmin
+        end
+
+        # Card min = taille de  Set max
+        if nmax == var.card_min
+            union!(var.min, var.max)
+        end
+
+        # Card maw = taille de  Set min
+        if nmin == var.card_max
+            intersect!(var.max, var.min)
         end
 
     end
@@ -215,7 +215,7 @@ function solver_generique!(liste_variables::Array{Variable, 1}, liste_contrainte
         for indice_var in ctr.liste_indice_arguments
             var = liste_variables[indice_var]
             if verifie_validite(var)
-                if !(var in arguments) && !verifie_clot(var) # A changer et n'est pas clot.
+                if !(var in arguments) # A changer
                     for indice in array_contrainte_variable[indice_var]
                         #Ne pas mettre plusieurs fois la même contrainte en attente.
                         if !(indice in liste_filtrage_restant)
@@ -232,93 +232,38 @@ function solver_generique!(liste_variables::Array{Variable, 1}, liste_contrainte
 end
 
 function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contraintes::Array{Contrainte, 1})
+    function inf_diff_card(left, right)
+        left_var = liste_variables[left]
+        right_var = liste_variables[right]
+        return left_var.card_max - left_var.card_min < right_var.card_max - right_var.card_min
+    end
     faisable = solver_generique!(liste_variables, liste_contraintes)
     if faisable
         liste_non_clot = findall(var -> !verifie_clot(var), liste_variables)
-        # TODO: finir
+        if !isempty(liste_non_clot) # condition d'arret
+            # branchement sur le plus petit écart entre la taille des bornes (pour clore rapidement)
+            sort!(liste_non_clot, lt=inf_diff_card)
+            indice_branchement = liste_non_clot[1]
+            var = liste_variables[indice_branchement]
+            candidat_ajout = collect(setdiff(var.max, var.min))
+            n = length(candidat_ajout)
+            indice_valeur = 1
+            faisable_temp = false
+            liste_variables_temp = []
+            while indice_valeur <= n && !faisable_temp
+                liste_variables_temp = deepcopy(liste_variables)
+                push!(liste_variables_temp[indice_branchement].min, candidat_ajout[indice_valeur])
+                faisable_temp = branch_and_bound!(liste_variables_temp, liste_contraintes)
+                indice_valeur += 1
+            end
+            if faisable_temp
+                for i in 1:length(liste_variables) # assignation
+                    liste_variables[i] = liste_variables_temp[i]
+                end
+            else
+                faisable = faisable_temp # pas faisable
+            end
+        end
     end
     return faisable
 end
-
-
-#==============================================================================#
-#============================= Test des fonctions =============================#
-#==============================================================================#
-
-Univers = Set((1, 2, 3, 4, 5, 6))
-v1 = Variable(Set{Int64}((1, 2, 3)), Univers, 2, 4)
-v2 = Variable(Set{Int64}((5, 6)), Univers, 2, 4)
-v3 = Variable(Set{Int64}((3, 5, 6)), Univers, 2, 4)
-
-function test_validite(var::Variable, varName::String = "var")
-    println(varName, " ", verifie_validite(var) ? "est valide." : "n'est pas valide.")
-end
-
-function test_clot(var::Variable, varName::String = "var")
-    println(varName, " ", verifie_clot(var) ? "est clot." : "n'est pas clot.")
-end
-
-function test_filtrage_intersection_vide(var1::Variable, var2::Variable, Univers::Set)
-    println("---------------------------------------")
-    println("Test de la contrainte intersection vide")
-    println("---------------------------------------")
-    print("var1 : ", var1, "var2 : ", var2)
-    println("Filtrage (var1 inter var2) = emptySet.")
-    filtrage_intersection_vide!([var1, var2], Univers)
-    print("var1 : ", var1, "var2 : ", var2)
-    test_validite(var1, "var1")
-    test_validite(var2, "var2")
-    test_clot(var1, "var1")
-    test_clot(var2, "var2")
-end
-#test_filtrage_intersection_vide(v1, v2, Univers)
-#test_filtrage_intersection_vide(v1, v3, Univers)
-
-
-function test_solver_generique1()
-    univers = Set([1, 2, 3, 4, 5, 6])
-    v1 = Variable(Set([1]), univers, 2, 4)
-    v2 = Variable(Set([3]), univers, 2, 4)
-    v3 = Variable(Set([5]), Set([5, 6]), 2, 4)
-    liste_variables = [v1 , v2, v3]
-    ctr1 = Contrainte([1, 2], filtrage_intersection_vide!, univers)
-    ctr2 = Contrainte([1, 3], filtrage_intersection_vide!, univers)
-    ctr3 = Contrainte([3, 2], filtrage_intersection_vide!, univers)
-    liste_contraintes = [ctr1, ctr2, ctr3]
-    println("Début du solver.")
-    faisable = solver_generique!(liste_variables, liste_contraintes)
-    println("Fin du solver.")
-    println(faisable ? "Faisable" : "Infaisable")
-    println(v1, "\t", v1.est_clot ? "clot" : "libre")
-    println(v2, "\t", v2.est_clot ? "clot" : "libre")
-    println(v3, "\t", v3.est_clot ? "clot" : "libre")
-end
-#test_solver_generique1()
-
-
-
-function test_solver_generique2()
-    univers = Set([1, 2, 3, 4, 5, 6, 8, 9, 10])
-    v1 = Variable(Set([1]), Set([1, 2]), 2, 20)
-    v2 = Variable(Set([3]), Set([1, 2, 3, 4]), 2, 20)
-    v3 = Variable(Set([5]), Set([1, 2, 3, 4, 5, 6]), 2, 20)
-    v4 = Variable(Set([7]), Set([1, 2, 3, 4, 5, 6, 7, 8]), 2, 20)
-    v5 = Variable(Set([9]), Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), 2, 20)
-    liste_variables = [v1 , v2, v3, v4, v5]
-
-    liste_contraintes = [
-        Contrainte([i, j], filtrage_intersection_vide!, univers)
-        for i in 1:5 for j in (i+1):5
-    ]
-
-    println("Début du solver.")
-    faisable = solver_generique!(liste_variables, liste_contraintes)
-    println("Fin du solver.")
-    println(faisable ? "Faisable" : "Infaisable")
-    println(v1, "\t", v1.est_clot ? "clot" : "libre")
-    println(v2, "\t", v2.est_clot ? "clot" : "libre")
-    println(v3, "\t", v3.est_clot ? "clot" : "libre")
-    println(v4, "\t", v4.est_clot ? "clot" : "libre")
-    println(v5, "\t", v5.est_clot ? "clot" : "libre")
-end
-#test_solver_generique2()
