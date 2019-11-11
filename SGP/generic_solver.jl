@@ -185,36 +185,38 @@ end
 #==============================================================================#
 
 struct Contrainte
-    liste_arguments::Array{Variable, 1}
+    liste_indice_arguments::Array{Int, 1}
     filtrage!::Function
     univers::Set{Int}
 end
 
-function filtrer!(ctr::Contrainte)
-    ctr.filtrage!(ctr.liste_arguments, ctr.univers)
-    for var in ctr.liste_arguments
+function filtrer!(ctr::Contrainte, liste_variables::Array{Variable, 1})
+    liste_arguments = [liste_variables[i] for i in ctr.liste_indice_arguments]
+    ctr.filtrage!(liste_arguments, ctr.univers)
+    for var in liste_arguments
         filtrage_individuel!(var, ctr.univers)
     end
 end
 
-function solver_generique(liste_contraintes::Array{Contrainte, 1}, liste_variables::Array{Variable, 1})
-    # Dictionnaire qui associe toutes les contraintes d'une variable à une variable
-    dict_contrainte_variable = Dict{String, Array{Int, 1}}()
-    for var in liste_variables
-        dict_contrainte_variable[var.id] = findall(ctr -> var in ctr.liste_arguments, liste_contraintes)
-    end
+function solver_generique!(liste_variables::Array{Variable, 1}, liste_contraintes::Array{Contrainte, 1})
+    # tableau qui associe toutes les contraintes d'une variable à l'indice de cet dernière dans liste_variables
+    array_contrainte_variable = [
+        findall(ctr -> indice in ctr.liste_indice_arguments, liste_contraintes)
+        for indice in 1:length(liste_variables)
+    ]
 
     liste_filtrage_restant = collect(length(liste_contraintes):-1:1)
     infaisable = false
     while !isempty(liste_filtrage_restant) && !infaisable
         indice_ctr = pop!(liste_filtrage_restant)
         ctr = liste_contraintes[indice_ctr]
-        arguments = deepcopy(ctr.liste_arguments)
-        filtrer!(ctr)
-        for var in ctr.liste_arguments
+        arguments = [deepcopy(liste_variables[i]) for i in ctr.liste_indice_arguments]
+        filtrer!(ctr, liste_variables)
+        for indice_var in ctr.liste_indice_arguments
+            var = liste_variables[indice_var]
             if verifie_validite(var)
                 if !(var in arguments) && !verifie_clot(var) # A changer et n'est pas clot.
-                    for indice in dict_contrainte_variable[var.id]
+                    for indice in array_contrainte_variable[indice_var]
                         #Ne pas mettre plusieurs fois la même contrainte en attente.
                         if !(indice in liste_filtrage_restant)
                             push!(liste_filtrage_restant, indice)
@@ -226,7 +228,16 @@ function solver_generique(liste_contraintes::Array{Contrainte, 1}, liste_variabl
             end
         end
     end
-    return !infaisable # retourne booléen si le solver a trouvé le problème faisable.
+    return !infaisable # retourne true si le solver a trouvé le problème faisable.
+end
+
+function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contraintes::Array{Contrainte, 1})
+    faisable = solver_generique!(liste_variables, liste_contraintes)
+    if faisable
+        liste_non_clot = findall(var -> !verifie_clot(var), liste_variables)
+        # TODO: finir
+    end
+    return faisable
 end
 
 
@@ -260,8 +271,8 @@ function test_filtrage_intersection_vide(var1::Variable, var2::Variable, Univers
     test_clot(var1, "var1")
     test_clot(var2, "var2")
 end
-test_filtrage_intersection_vide(v1, v2, Univers)
-test_filtrage_intersection_vide(v1, v3, Univers)
+#test_filtrage_intersection_vide(v1, v2, Univers)
+#test_filtrage_intersection_vide(v1, v3, Univers)
 
 
 function test_solver_generique1()
@@ -270,19 +281,19 @@ function test_solver_generique1()
     v2 = Variable(Set([3]), univers, 2, 4)
     v3 = Variable(Set([5]), Set([5, 6]), 2, 4)
     liste_variables = [v1 , v2, v3]
-    ctr1 = Contrainte([v1, v2], filtrage_intersection_vide!, univers)
-    ctr2 = Contrainte([v1, v3], filtrage_intersection_vide!, univers)
-    ctr3 = Contrainte([v3, v2], filtrage_intersection_vide!, univers)
+    ctr1 = Contrainte([1, 2], filtrage_intersection_vide!, univers)
+    ctr2 = Contrainte([1, 3], filtrage_intersection_vide!, univers)
+    ctr3 = Contrainte([3, 2], filtrage_intersection_vide!, univers)
     liste_contraintes = [ctr1, ctr2, ctr3]
     println("Début du solver.")
-    faisable = solver_generique(liste_contraintes, liste_variables)
+    faisable = solver_generique!(liste_variables, liste_contraintes)
     println("Fin du solver.")
     println(faisable ? "Faisable" : "Infaisable")
     println(v1, "\t", v1.est_clot ? "clot" : "libre")
     println(v2, "\t", v2.est_clot ? "clot" : "libre")
     println(v3, "\t", v3.est_clot ? "clot" : "libre")
 end
-test_solver_generique1()
+#test_solver_generique1()
 
 
 
@@ -296,16 +307,12 @@ function test_solver_generique2()
     liste_variables = [v1 , v2, v3, v4, v5]
 
     liste_contraintes = [
-        Contrainte([liste_variables[i], liste_variables[j]], filtrage_intersection_vide!, univers)
+        Contrainte([i, j], filtrage_intersection_vide!, univers)
         for i in 1:5 for j in (i+1):5
     ]
 
-
-    ctr1 = Contrainte([v1, v2], filtrage_intersection_vide!, univers)
-    ctr2 = Contrainte([v1, v3], filtrage_intersection_vide!, univers)
-    ctr3 = Contrainte([v3, v2], filtrage_intersection_vide!, univers)
     println("Début du solver.")
-    faisable = solver_generique(liste_contraintes, liste_variables)
+    faisable = solver_generique!(liste_variables, liste_contraintes)
     println("Fin du solver.")
     println(faisable ? "Faisable" : "Infaisable")
     println(v1, "\t", v1.est_clot ? "clot" : "libre")
@@ -314,3 +321,4 @@ function test_solver_generique2()
     println(v4, "\t", v4.est_clot ? "clot" : "libre")
     println(v5, "\t", v5.est_clot ? "clot" : "libre")
 end
+#test_solver_generique2()
