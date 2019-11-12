@@ -5,7 +5,7 @@
 #1 -3 0 # x1 et non x3 0 veut dire fin de ligne
 #2 3 -1 0
 
-n = 4
+n = 6
 w = n-1
 g = div(n,2)
 q = n
@@ -106,11 +106,11 @@ function sat(w,g,q)
 			end
 		end
 	end
-	for i in 1:w
-		for j in 1:g
+	for k in 1:q-1
+		for kk in k+1:q
 			s = ""
-			for k in 1:q-1
-				for kk in k+1:q
+			for i in 1:w
+				for j in 1:g
 					s = s*string(zpla(i,j,k,kk)," ")
 				end
 			end
