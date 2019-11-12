@@ -237,8 +237,35 @@ end
 
 function filtrage_card_intersection_inferieur_1!(liste_Variable::Array{Variable, 1}, Univers::Set)
     var1, var2 = liste_Variable
-    # TODO :
+    inter = intersect(var1.min, var2.min)
 
+    if !isempty(inter)
+        valeur = pop!(inter) # selectionner une valeur.
+
+        min_v1 = setdiff(var1.min, valeur)
+        setdiff!(var2.max, min_v1)
+
+        min_v2 = setdiff(var2.min, valeur)
+        setdiff!(var1.max, min_v2)
+
+        # Utile pour la suite du problème
+        filtrage_individuel!(var1, Univers)
+        filtrage_individuel!(var2, Univers)
+    end
+
+    omega = union(var1.max, var2.max)
+    n = length(omega)
+    n1 = length(var1.min)
+    n2 = length(var2.min)
+
+    if n1 + n2 > n+1
+        if n1 == var1.card_min
+            var2.card_max -= 1
+        end
+        if n2 == var2.card_min
+            var1.card_max -= 1
+        end
+    end
 
     return nothing
 end
