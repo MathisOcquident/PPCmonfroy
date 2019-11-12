@@ -128,58 +128,6 @@ function est_vide(var::Variable)
     return vide
 end
 
-# on filtre la contrainte : (var1 inter var2) = emptyset
-function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1}, Univers::Set)
-    var1, var2 = liste_Variable
-    if (!var1.est_clot)
-        setdiff!(var1.max, var2.min)
-        var1.card_max = max(var1.card_max, length(setdiff( Univers, var2.min )) )
-    end
-    if (!var2.est_clot)
-        setdiff!(var2.max, var1.min)
-        var2.card_max = max(var2.card_max, length(setdiff( Univers, var1.min )) )
-    end
-    return nothing
-end
-
-function filtrage_card_intersection_inferieur_1!(liste_Variable::Array{Variable, 1}, Univers::Set)
-    var1, var2 = liste_Variable
-    # TODO :
-
-
-    return nothing
-end
-
-function filtrage_individuel!(var::Variable, Univers::Set)
-    if !var.est_clot
-        nmax = length(var.max)
-        nmin = length(var.min)
-
-        # card Max > taille de set Max
-        if nmax < var.card_max
-            var.card_max = nmax
-        end
-
-        # card Min < taille de set Min
-        if nmin > var.card_min
-            var.card_min = nmin
-        end
-
-        # Card min = taille de  Set max
-        if nmax == var.card_min
-            union!(var.min, var.max)
-        end
-
-        # Card maw = taille de  Set min
-        if nmin == var.card_max
-            intersect!(var.max, var.min)
-        end
-
-    end
-    verifie_clot(var)
-    return nothing
-end
-
 #==============================================================================#
 #================================ Contrainte ==================================#
 #==============================================================================#
@@ -266,4 +214,61 @@ function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contrainte
         end
     end
     return faisable
+end
+
+#==============================================================================#
+#================================= Filtrage ===================================#
+#==============================================================================#
+
+
+# on filtre la contrainte : (var1 inter var2) = emptyset
+function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1}, Univers::Set)
+    var1, var2 = liste_Variable
+    if (!var1.est_clot)
+        setdiff!(var1.max, var2.min)
+        var1.card_max = max(var1.card_max, length(setdiff( Univers, var2.min )) )
+    end
+    if (!var2.est_clot)
+        setdiff!(var2.max, var1.min)
+        var2.card_max = max(var2.card_max, length(setdiff( Univers, var1.min )) )
+    end
+    return nothing
+end
+
+function filtrage_card_intersection_inferieur_1!(liste_Variable::Array{Variable, 1}, Univers::Set)
+    var1, var2 = liste_Variable
+    # TODO :
+
+
+    return nothing
+end
+
+function filtrage_individuel!(var::Variable, Univers::Set)
+    if !var.est_clot
+        nmax = length(var.max)
+        nmin = length(var.min)
+
+        # card Max > taille de set Max
+        if nmax < var.card_max
+            var.card_max = nmax
+        end
+
+        # card Min < taille de set Min
+        if nmin > var.card_min
+            var.card_min = nmin
+        end
+
+        # Card min = taille de  Set max
+        if nmax == var.card_min
+            union!(var.min, var.max)
+        end
+
+        # Card maw = taille de  Set min
+        if nmin == var.card_max
+            intersect!(var.max, var.min)
+        end
+
+    end
+    verifie_clot(var)
+    return nothing
 end
