@@ -46,6 +46,7 @@ function greedy_premiere_semaine!(liste_var::Array{Variable, 1}, w::Int, g::Int,
     end
 end
 
+# w : nombre de semaine, g : nombre de groupe, p : nombre de joueur
 function solve_SGP(w::Int, g::Int, p::Int)
     liste_var, liste_ctr = genere_contrainte_SGP(w, g, p)
     greedy_premiere_semaine!(liste_var, w, g, p)
@@ -61,10 +62,11 @@ end
 solve_SGP(2, 2, 2)
 
 
-# 2, 2, 2 faisable 0.001 s
-# 3, 3, 3 faisable 0.013 s
+# 2, 2, 2 faisable 0.001 secondes
+# 3, 3, 3 faisable 0.013 secondes
 # 4, 4, 4 faisable 0.066 secondes
-# 5, 5, 5 faisable, 57.36 secondes
+# 5, 5, 5 faisable 57.36 secondes
+# 5, 3, 2 faisable 0.029 secondes
 
 
 # 7, 2, 2 infaisable
