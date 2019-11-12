@@ -30,8 +30,20 @@ function test_filtrage_intersection_vide(var1::Variable, var2::Variable, Univers
     test_clot(var1, "var1")
     test_clot(var2, "var2")
 end
-#test_filtrage_intersection_vide(v1, v2, Univers)
-#test_filtrage_intersection_vide(v1, v3, Univers)
+
+function test_filtrage_card_intersection_inferieur_1(var1::Variable, var2::Variable, Univers::Set)
+    println("---------------------------------------------------------")
+    println("Test de la contrainte cardinal intersection inférieur à 1")
+    println("---------------------------------------------------------")
+    print("var1 : ", var1, "var2 : ", var2)
+    println("Filtrage |(var1 inter var2)| <= 1.")
+    filtrage_card_intersection_inferieur_1!([var1, var2], Univers)
+    print("var1 : ", var1, "var2 : ", var2)
+    test_validite(var1, "var1")
+    test_validite(var2, "var2")
+    test_clot(var1, "var1")
+    test_clot(var2, "var2")
+end
 
 
 function test_solver_generique1()
@@ -53,7 +65,6 @@ function test_solver_generique1()
     println(v2, "\t", v2.est_clot ? "clot" : "libre")
     println(v3, "\t", v3.est_clot ? "clot" : "libre")
 end
-test_solver_generique1()
 
 
 
@@ -82,7 +93,6 @@ function test_solver_generique2()
     println(v4, "\t", v4.est_clot ? "clot" : "libre")
     println(v5, "\t", v5.est_clot ? "clot" : "libre")
 end
-test_solver_generique2()
 
 function test_branch_and_bound1()
     println("Test branch and bound 1")
@@ -128,5 +138,19 @@ function test_branch_and_bound2()
     end
 end
 
-test_branch_and_bound1()
-test_branch_and_bound2()
+
+println("")
+#test_filtrage_intersection_vide(v1, v2, Univers)
+#test_filtrage_intersection_vide(v1, v3, Univers)
+
+println("")
+test_filtrage_card_intersection_inferieur_1(v1, v2, Univers)
+test_filtrage_card_intersection_inferieur_1(v1, v3, Univers)
+
+println("")
+#test_solver_generique1()
+#test_solver_generique2()
+
+println("")
+#test_branch_and_bound1()
+#test_branch_and_bound2()
