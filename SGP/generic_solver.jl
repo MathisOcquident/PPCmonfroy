@@ -226,11 +226,11 @@ function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1}, Univers
     var1, var2 = liste_Variable
     if (!var1.est_clot)
         setdiff!(var1.max, var2.min)
-        var1.card_max = max(var1.card_max, length(setdiff( Univers, var2.min )) )
+        var1.card_max = min(var1.card_max, length(setdiff( Univers, var2.min )) )
     end
     if (!var2.est_clot)
         setdiff!(var2.max, var1.min)
-        var2.card_max = max(var2.card_max, length(setdiff( Univers, var1.min )) )
+        var2.card_max = min(var2.card_max, length(setdiff( Univers, var1.min )) )
     end
     return nothing
 end
