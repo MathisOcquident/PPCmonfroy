@@ -56,6 +56,29 @@ function solve_SGP(w::Int, g::Int, p::Int)
     println(faisable ? "faisable" : "infaisable")
     if faisable
         println(liste_var)
+        matrice = listes_variables_vers_matrice(liste_var, w, g, p)
+        beau_print_res(matrice)
+    end
+end
+
+function listes_variables_vers_matrice(liste_var, w, g, p)
+    mat = Array{Array{Int, 1}, 2}(undef, (w, g))
+    for semaine in 1:w
+        for groupe in 1:g
+            indice = g*(semaine-1)+groupe
+            mat[semaine, groupe] = collect(liste_var[indice].min)
+        end
+    end
+    return mat
+end
+
+function beau_print_res(matrice::Array{Array{Int, 1}, 2})
+    w, g = size(matrice)
+    for semaine in 1:w
+        println("Semaine ", semaine)
+        for groupe in 1:g
+            println("   groupe ", groupe, " : ", matrice[semaine, groupe])
+        end
     end
 end
 
