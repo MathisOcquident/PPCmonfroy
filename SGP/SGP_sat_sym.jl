@@ -9,7 +9,7 @@
 w = 4
 g = 4
 p = 4
-q = 16
+q = g*p
 
 function pla(i,j,k)
 	return i + w*(j-1) + w*g*(k-1)
