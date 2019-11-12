@@ -200,9 +200,14 @@ function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contrainte
             liste_variables_temp = []
             while indice_valeur <= n && !faisable_temp
                 liste_variables_temp = deepcopy(liste_variables)
-                push!(liste_variables_temp[indice_branchement].min, candidat_ajout[indice_valeur])
+                valeur_ajout = candidat_ajout[indice_valeur]
+                push!(liste_variables_temp[indice_branchement].min, valeur_ajout)
                 faisable_temp = branch_and_bound!(liste_variables_temp, liste_contraintes)
                 indice_valeur += 1
+                # On sait le problème infaisable avec, alors on le retire.
+                if !faisable_temp
+                    setdiff!(liste_variables[indice_branchement].max, valeur_ajout)
+                end
             end
             if faisable_temp
                 for i in 1:length(liste_variables) # assignation
@@ -258,14 +263,8 @@ function filtrage_card_intersection_inferieur_1!(liste_Variable::Array{Variable,
     n1 = length(var1.min)
     n2 = length(var2.min)
 
-    if n1 + n2 > n+1
-        if n1 == var1.card_min
-            var2.card_max -= 1
-        end
-        if n2 == var2.card_min
-            var1.card_max -= 1
-        end
-    end
+    var1.card_max = min(var1.card_max, n+1 - n2 )
+    var2.card_max = min(var2.card_max, n+1 - n1 )
 
     return nothing
 end
