@@ -1,6 +1,6 @@
-using JuMP, GLPK, MathOptInterface, LinearAlgebra#, CPLEX
+using JuMP, Gurobi, MathOptInterface, LinearAlgebra#, CPLEX
 function IP(w,g,p,q)
-	m = Model(with_optimizer(GLPK.Optimizer))
+	m = Model(with_optimizer(Gurobi.Optimizer))
 	
 	@variable(m,x[1:w,1:g,1:q], binary=true)
 	@variable(m,z[1:w,1:g,1:q,1:q], binary=true)
@@ -16,10 +16,10 @@ function IP(w,g,p,q)
 	return m
 end
 
-w = 4
-g = 4
-p = 4
-q = 16
+w = 5
+g = 5
+p = 5
+q = g*p
 
 m = IP(w,g,p,q)
 
@@ -31,7 +31,7 @@ x = value.(m[:x])
 for i in 1:w	
 	println("Semaine ",i)
 	for j in 1:g
-		println("    Groupe ",j,"  ",x[i,j,:])
+		println("    Groupe ",j,"  ",findall(x->x==1,x[i,j,:]))
 	end
 end
 
