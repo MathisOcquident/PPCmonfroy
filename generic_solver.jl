@@ -9,17 +9,21 @@ mutable struct Variable
     max::Set{Int64}
     card_min::Int64
     card_max::Int64
-    est_clot::Bool
 
+    univers::Set{Int64}
+
+    est_clot::Bool
     id::String
 
     Variable(min::Set{Int64}, max::Set{Int64},
             card_min::Int64, card_max::Int64,
+            univers::Set{Int64},
             est_clot::Bool = false) = new(
         Set{Int64}(min),
         Set{Int64}(max),
         card_min,
         card_max,
+        univers,
         est_clot,
         generer_random_id(20)
     )
@@ -135,14 +139,13 @@ end
 struct Contrainte
     liste_indice_arguments::Array{Int, 1}
     filtrage!::Function
-    univers::Set{Int}
 end
 
 function filtrer!(ctr::Contrainte, liste_variables::Array{Variable, 1})
     liste_arguments = [liste_variables[i] for i in ctr.liste_indice_arguments]
-    ctr.filtrage!(liste_arguments, ctr.univers)
+    ctr.filtrage!(liste_arguments)
     for var in liste_arguments
-        filtrage_individuel!(var, ctr.univers)
+        filtrage_individuel!(var)
     end
 end
 
@@ -225,51 +228,7 @@ end
 #================================= Filtrage ===================================#
 #==============================================================================#
 
-
-# on filtre la contrainte : (var1 inter var2) = emptyset
-function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1}, Univers::Set)
-    var1, var2 = liste_Variable
-    if (!var1.est_clot)
-        setdiff!(var1.max, var2.min)
-        var1.card_max = min(var1.card_max, length(setdiff( Univers, var2.min )) )
-    end
-    if (!var2.est_clot)
-        setdiff!(var2.max, var1.min)
-        var2.card_max = min(var2.card_max, length(setdiff( Univers, var1.min )) )
-    end
-    return nothing
-end
-
-function filtrage_card_intersection_inferieur_1!(liste_Variable::Array{Variable, 1}, Univers::Set)
-    var1, var2 = liste_Variable
-    inter = intersect(var1.min, var2.min)
-
-    if !isempty(inter)
-        valeur = pop!(inter) # selectionner une valeur.
-
-        min_v1 = setdiff(var1.min, valeur)
-        setdiff!(var2.max, min_v1)
-
-        min_v2 = setdiff(var2.min, valeur)
-        setdiff!(var1.max, min_v2)
-
-        # Utile pour la suite du problème
-        filtrage_individuel!(var1, Univers)
-        filtrage_individuel!(var2, Univers)
-    end
-
-    omega = union(var1.max, var2.max)
-    n = length(omega)
-    n1 = length(var1.min)
-    n2 = length(var2.min)
-
-    var1.card_max = min(var1.card_max, n+1 - n2 )
-    var2.card_max = min(var2.card_max, n+1 - n1 )
-
-    return nothing
-end
-
-function filtrage_individuel!(var::Variable, Univers::Set)
+function filtrage_individuel!(var::Variable)
     if !var.est_clot
         nmax = length(var.max)
         nmin = length(var.min)

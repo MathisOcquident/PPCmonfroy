@@ -1,11 +1,54 @@
-include("generic_solver.jl")
+include("../generic_solver.jl")
 
+
+# on filtre la contrainte : (var1 inter var2) = emptyset
+function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1})
+    var1, var2 = liste_Variable
+    if (!var1.est_clot)
+        setdiff!(var1.max, var2.min)
+        var1.card_max = min(var1.card_max, length(setdiff( var1.univers, var2.min )) )
+    end
+    if (!var2.est_clot)
+        setdiff!(var2.max, var1.min)
+        var2.card_max = min(var2.card_max, length(setdiff( var2.univers, var1.min )) )
+    end
+    return nothing
+end
+
+function filtrage_card_intersection_inferieur_1!(liste_Variable::Array{Variable, 1})
+    var1, var2 = liste_Variable
+    inter = intersect(var1.min, var2.min)
+
+    if !isempty(inter)
+        valeur = pop!(inter) # selectionner une valeur.
+
+        min_v1 = setdiff(var1.min, valeur)
+        setdiff!(var2.max, min_v1)
+
+        min_v2 = setdiff(var2.min, valeur)
+        setdiff!(var1.max, min_v2)
+
+        # Utile pour la suite du problème
+        filtrage_individuel!(var1)
+        filtrage_individuel!(var2)
+    end
+
+    omega = union(var1.max, var2.max)
+    n = length(omega)
+    n1 = length(var1.min)
+    n2 = length(var2.min)
+
+    var1.card_max = min(var1.card_max, n+1 - n2 )
+    var2.card_max = min(var2.card_max, n+1 - n1 )
+
+    return nothing
+end
 
 # w : nombre de semaine, g : nombre de groupe, p : nombre de joueur
 function genere_contrainte_SGP(w::Int, g::Int, p::Int)
     q = g * p # nombre de joueurs
     joueurs = Set(collect(1:q))
-    liste_var = [ Variable(Set{Int64}([]), joueurs, p, p) for i in 1:(w*g)]
+    liste_var = [ Variable(Set{Int64}([]), joueurs, p, p, joueurs) for i in 1:(w*g)]
     liste_ctr = Array{Contrainte, 1}()
     # Contrainte intersection vide
     for s in 1:w
@@ -13,7 +56,7 @@ function genere_contrainte_SGP(w::Int, g::Int, p::Int)
             for j in (i+1):g
                 k1 = g*(s-1)+i
                 k2 = g*(s-1)+j
-                push!(liste_ctr, Contrainte([k1, k2], filtrage_intersection_vide!, joueurs))
+                push!(liste_ctr, Contrainte([k1, k2], filtrage_intersection_vide!))
             end
         end
     end
@@ -24,7 +67,7 @@ function genere_contrainte_SGP(w::Int, g::Int, p::Int)
                 for j in 1:g
                     k1 = g*(s1-1)+i
                     k2 = g*(s2-1)+j
-                    push!(liste_ctr, Contrainte([k1, k2], filtrage_card_intersection_inferieur_1!, joueurs))
+                    push!(liste_ctr, Contrainte([k1, k2], filtrage_card_intersection_inferieur_1!))
                 end
             end
         end
