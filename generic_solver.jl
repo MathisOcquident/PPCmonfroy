@@ -186,8 +186,8 @@ function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contrainte
     function inf_diff_card(left, right)
         left_var = liste_variables[left]
         right_var = liste_variables[right]
-        return min(left_var.card_max, length(left_var.max)) - length(left_var.min) <=
-            min(right_var.card_max, length(right_var.max)) - length(right_var.min)
+        return  left_var.card_max - length(left_var.min) <=
+                right_var.card_max - length(right_var.min)
     end
     faisable = solver_generique!(liste_variables, liste_contraintes)
     if faisable
