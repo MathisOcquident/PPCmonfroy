@@ -1,0 +1,69 @@
+Ensembliste
+
+FD
+OPTIMAL
+Semaine 1
+    Groupe 1  [1, 2, 3, 9, 25]
+    Groupe 2  [4, 8, 11, 13, 14]
+    Groupe 3  [5, 12, 20, 22, 24]
+    Groupe 4  [6, 16, 17, 18, 23]
+    Groupe 5  [7, 10, 15, 19, 21]
+Semaine 2
+    Groupe 1  [1, 5, 7, 8, 16]
+    Groupe 2  [3, 14, 15, 20, 23]
+    Groupe 3  [4, 9, 10, 17, 24]
+    Groupe 4  [6, 13, 19, 22, 25]
+    Groupe 5  [2, 11, 12, 18, 21]
+Semaine 3
+    Groupe 1  [1, 4, 6, 12, 15]
+    Groupe 2  [9, 14, 16, 21, 22]
+    Groupe 3  [8, 10, 18, 20, 25]
+    Groupe 4  [3, 5, 11, 17, 19]
+    Groupe 5  [2, 7, 13, 23, 24]
+Semaine 4
+    Groupe 1  [8, 9, 12, 19, 23]
+    Groupe 2  [1, 13, 17, 20, 21]
+    Groupe 3  [3, 4, 7, 18, 22]
+    Groupe 4  [2, 5, 6, 10, 14]
+    Groupe 5  [11, 15, 16, 24, 25]
+Semaine 5
+    Groupe 1  [3, 10, 12, 13, 16]
+    Groupe 2  [6, 7, 9, 11, 20]
+    Groupe 3  [4, 5, 21, 23, 25]
+    Groupe 4  [2, 8, 15, 17, 22]
+    Groupe 5  [1, 14, 18, 19, 24]
+
+SAT
+Semaine 1
+    Groupe 1  [3, 7, 9, 10, 23]
+    Groupe 2  [6, 8, 17, 18, 25]
+    Groupe 3  [1, 4, 14, 15, 21]
+    Groupe 4  [2, 19, 20, 22, 24]
+    Groupe 5  [5, 11, 12, 13, 16]
+Semaine 2
+    Groupe 1  [4, 5, 7, 17, 24]
+    Groupe 2  [1, 12, 20, 23, 25]
+    Groupe 3  [6, 10, 13, 14, 22]
+    Groupe 4  [3, 16, 18, 19, 21]
+    Groupe 5  [2, 8, 9, 11, 15]
+Semaine 3
+    Groupe 1  [2, 13, 17, 21, 23]
+    Groupe 2  [4, 6, 9, 12, 19]
+    Groupe 3  [1, 7, 8, 16, 22]
+    Groupe 4  [3, 11, 14, 24, 25]
+    Groupe 5  [5, 10, 15, 18, 20]
+Semaine 4
+    Groupe 1  [6, 15, 16, 23, 24]
+    Groupe 2  [1, 10, 11, 17, 19]
+    Groupe 3  [3, 4, 8, 13, 20]
+    Groupe 4  [5, 9, 21, 22, 25]
+    Groupe 5  [2, 7, 12, 14, 18]
+Semaine 5
+    Groupe 1  [6, 7, 11, 20, 21]
+    Groupe 2  [3, 12, 15, 17, 22]
+    Groupe 3  [5, 8, 14, 19, 23]
+    Groupe 4  [1, 9, 13, 18, 24]
+    Groupe 5  [2, 4, 10, 16, 25]
+
+B&B
+

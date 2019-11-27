@@ -8,7 +8,7 @@
 
 w = 4
 g = 4
-p = 4
+p = 4x
 q = g*p
 
 function pla(i,j,k)
@@ -119,3 +119,5 @@ function sat(w,g,p,q)
 end
 
 sat(w,g,p,q)
+
+[if x[i]<=x[i+1] x[i],x[i+1] else x[i+1],x[i] end for i in 1:n-1]
