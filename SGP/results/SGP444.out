@@ -74,4 +74,24 @@ Semaine 4
 
 
 B&B
-
+	time 0.077761 seconds
+Semaine 1
+   groupe 1 : [4, 2, 3, 1]
+   groupe 2 : [7, 5, 8, 6]
+   groupe 3 : [9, 10, 11, 12]
+   groupe 4 : [13, 14, 16, 15]
+Semaine 2
+   groupe 1 : [9, 13, 5, 1]
+   groupe 2 : [14, 10, 2, 6]
+   groupe 3 : [7, 3, 11, 15]
+   groupe 4 : [4, 16, 8, 12]
+Semaine 3
+   groupe 1 : [16, 11, 6, 1]
+   groupe 2 : [2, 5, 15, 12]
+   groupe 3 : [9, 14, 3, 8]
+   groupe 4 : [7, 4, 13, 10]
+Semaine 4
+   groupe 1 : [7, 14, 12, 1]
+   groupe 2 : [13, 2, 11, 8]
+   groupe 3 : [10, 3, 16, 5]
+   groupe 4 : [4, 9, 15, 6]
