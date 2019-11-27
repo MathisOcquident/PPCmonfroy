@@ -79,14 +79,24 @@ end
 
 function greedy_premiere_semaine!(liste_var::Array{Variable, 1}, w::Int, g::Int, p::Int)
     s1 = 1
+    s2 = 2
     k = 1
     for i in 1:g
-        indice = g*(s1-1)+i
+        indice1 = g*(s1-1)+i
+        indice2 = g*(s2-1)
         for j in 1:p
-            ajouter!(liste_var[indice], k)
+            ajouter!(liste_var[indice1], k)
+            ajouter!(liste_var[indice2+j], k)
+            if i == 1
+                for si in 3:w
+                    indice3 = g*(si-1)+j
+                    ajouter!(liste_var[indice3], k)
+                end
+            end
             k += 1
         end
     end
+
 end
 
 # w : nombre de semaine, g : nombre de groupe, p : nombre de joueur

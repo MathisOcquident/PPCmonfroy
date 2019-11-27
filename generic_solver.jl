@@ -200,7 +200,8 @@ function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contrainte
         liste_non_clot = findall(var -> !verifie_clot(var), liste_variables)
         if !isempty(liste_non_clot) # condition d'arret
             # branchement sur le plus petit écart entre la taille des bornes (pour clore rapidement)
-            sort!(liste_non_clot, lt=inf_diff_card)
+            #sort!(liste_non_clot, lt=inf_diff_card)
+            sort!(liste_non_clot, by = e -> liste_variables[e].card_max - length(liste_variables[e].min) )
             indice_branchement = liste_non_clot[1]
             var = liste_variables[indice_branchement]
             candidat_ajout = collect(setdiff(var.max, var.min))
