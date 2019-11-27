@@ -67,6 +67,12 @@ function fixer!(var::Variable, valeur::Set{Int})
     return var
 end
 
+# Ajoute une valeur au set min
+function ajouter!(var::Variable, valeur::Int)
+    push!(var.min, valeur)
+    filtrage_individuel!(var)
+end
+
 # On modifie le print lors d'un print(var::Variable) ou d'un println(var::Variable)
 function Base.show(io::IO, var::Variable)
     compact = get(io, :compact, false)
@@ -205,7 +211,7 @@ function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contrainte
             while indice_valeur <= n && !faisable_temp
                 liste_variables_temp = deepcopy(liste_variables)
                 valeur_ajout = candidat_ajout[indice_valeur]
-                push!(liste_variables_temp[indice_branchement].min, valeur_ajout)
+                ajouter!(liste_variables_temp[indice_branchement], valeur_ajout)
                 faisable_temp = branch_and_bound!(liste_variables_temp, liste_contraintes)
                 indice_valeur += 1
                 # On sait le problème infaisable avec, alors on le retire.

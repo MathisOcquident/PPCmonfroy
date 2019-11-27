@@ -83,7 +83,7 @@ function greedy_premiere_semaine!(liste_var::Array{Variable, 1}, w::Int, g::Int,
     for i in 1:g
         indice = g*(s1-1)+i
         for j in 1:p
-            push!(liste_var[indice].min, k)
+            ajouter!(liste_var[indice], k)
             k += 1
         end
     end
