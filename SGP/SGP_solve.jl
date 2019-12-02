@@ -135,7 +135,7 @@ function beau_print_res(matrice::Array{Array{Int, 1}, 2})
     end
 end
 
-solve_SGP(2, 2, 2)
+solve_SGP(5,5,5)
 
 
 # 2, 2, 2 faisable 0.001 secondes

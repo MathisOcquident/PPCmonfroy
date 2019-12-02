@@ -63,6 +63,41 @@ end
 function sat(w,g,p,q)
 	open("satsgp.cnf","w") do f
 	# ctr 1
+	for i in 1:w, k in 1:q
+		s = ""
+		for j in 1:g
+			s = s*string(pla(i,j,k)," ")
+		end
+		s = s*"0"
+		write(f,s*"\n")
+	end
+	for i in 1:w, j in 1:g-1, jj in j+1:g, k in 1:q
+		write(f,string("-",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
+	end
+
+	# ctr 2
+	for ii in 1:w, jj in 1:g
+		enumar(f,ii,jj,q-p+1,q,true)
+	end
+	for ii in 1:w, jj in 1:g
+		enumar(f,ii,jj,p+1,q,false)
+	end
+
+	# ctr 3
+	for k in 1:q-1, kk in k+1:q, i in 1:w, ii in 1:w, j in 1:g, jj in 1:g
+		if jj != j || ii!=i
+			write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
+		end
+	end
+	end
+end
+
+sat(w,g,p,q)
+
+
+function satold(w,g,p,q)
+	open("satsgp.cnf","w") do f
+	# ctr 1
 	for i in 1:w
 		for k in 1:q
 			s = ""
@@ -114,4 +149,3 @@ function sat(w,g,p,q)
 	end
 end
 
-sat(w,g,p,q)
