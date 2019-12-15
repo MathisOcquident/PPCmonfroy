@@ -82,8 +82,6 @@ function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1})
     return nothing
 end
 
-univers = Set(collect(1:9))
-variables = [Variable(Set{Int64}(), univers, 1, 1, univers) for i in 1:(9*9)]
 contraintes = Array{Contrainte, 1}()
 # Contrainte ligne
 contraintesL = Array{Contrainte, 1}()
@@ -122,42 +120,33 @@ for b in 1:9
 end
 append!(contraintes, contraintesB)
 
+grille = [  0 2 0  0 0 0  0 7 0;
+            0 0 0  1 0 4  0 0 0;
+            0 3 1  0 0 0  5 2 0;
 
+            3 5 0  0 0 0  0 6 9;
+            8 0 0  0 0 0  0 0 2;
+            0 0 0  6 0 5  0 0 0;
 
+            0 0 7  0 3 0  4 0 0;
+            0 0 3  4 0 8  6 0 0;
+            0 0 0  0 9 0  0 0 0;
+        ]
 
-fixer!(variables[2], Set([2]))
-fixer!(variables[8], Set([7]))
+function fixer_vars_init!(liste_variables, grille)
+    for l in 1:9
+        for c in 1:9
+            if grille[l, c] != 0
+                fixer!(liste_variables[pla(l, c)], Set([grille[l, c]]))
+            end
+        end
+    end
+end
 
-fixer!(variables[13], Set([1]))
-fixer!(variables[15], Set([4]))
+univers = Set(collect(1:9))
+variables = [Variable(Set{Int64}(), univers, 1, 1, univers) for i in 1:(9*9)]
 
-fixer!(variables[20], Set([3]))
-fixer!(variables[21], Set([1]))
-fixer!(variables[25], Set([5]))
-fixer!(variables[26], Set([2]))
-
-fixer!(variables[28], Set([3]))
-fixer!(variables[29], Set([5]))
-fixer!(variables[35], Set([6]))
-fixer!(variables[36], Set([9]))
-
-fixer!(variables[pla(5, 1)], Set([8]))
-fixer!(variables[pla(5, 9)], Set([2]))
-
-fixer!(variables[pla(6, 4)], Set([6]))
-fixer!(variables[pla(6, 6)], Set([5]))
-
-fixer!(variables[pla(7, 3)], Set([7]))
-fixer!(variables[pla(7, 5)], Set([3]))
-fixer!(variables[pla(7, 7)], Set([4]))
-
-fixer!(variables[pla(8, 3)], Set([3]))
-fixer!(variables[pla(8, 4)], Set([4]))
-fixer!(variables[pla(8, 6)], Set([8]))
-fixer!(variables[pla(8, 7)], Set([6]))
-
-fixer!(variables[pla(9, 5)], Set([9]))
-
+fixer_vars_init!(variables, grille)
 mat = varToMat(variables)
 beauPrint(mat)
 #status = solver_generique!(variables, contraintes)
