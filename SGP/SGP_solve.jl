@@ -4,14 +4,12 @@ include("../generic_solver.jl")
 # on filtre la contrainte : (var1 inter var2) = emptyset
 function filtrage_intersection_vide!(liste_Variable::Array{Variable, 1})
     var1, var2 = liste_Variable
-    if (!var1.est_clot)
-        setdiff!(var1.max, var2.min)
-        var1.card_max = min(var1.card_max, length(setdiff( var1.univers, var2.min )) )
-    end
-    if (!var2.est_clot)
-        setdiff!(var2.max, var1.min)
-        var2.card_max = min(var2.card_max, length(setdiff( var2.univers, var1.min )) )
-    end
+    setdiff!(var1.max, var2.min)
+    var1.card_max = min(var1.card_max, length(setdiff( var1.univers, var2.min )) )
+
+    setdiff!(var2.max, var1.min)
+    var2.card_max = min(var2.card_max, length(setdiff( var2.univers, var1.min )) )
+
     return nothing
 end
 
@@ -103,12 +101,12 @@ end
 function solve_SGP(w::Int, g::Int, p::Int)
     liste_var, liste_ctr = genere_contrainte_SGP(w, g, p)
     greedy_premiere_semaine!(liste_var, w, g, p)
-    println(liste_var)
+    #println(liste_var)
     println("branch_and_bound")
     @time faisable = branch_and_bound!(liste_var, liste_ctr)
     println(faisable ? "faisable" : "infaisable")
     if faisable
-        println(liste_var)
+        #println(liste_var)
         matrice = listes_variables_vers_matrice(liste_var, w, g, p)
         beau_print_res(matrice)
     end
