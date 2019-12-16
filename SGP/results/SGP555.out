@@ -1,5 +1,39 @@
 Ensembliste
 
+Semaine 1
+    Groupe 1 [5,8,14,20,21]
+    Groupe 2 [4,11,13,16,24]
+    Groupe 3 [3,6,9,17,25]
+    Groupe 4 [2,7,12,19,23]
+    Groupe 5 [1,10,15,18,22]
+Semaine 2
+    Groupe 1 [7,10,13,17,21]
+    Groupe 2 [6,8,15,16,23]
+    Groupe 3 [3,5,11,19,22]
+    Groupe 4 [2,4,14,18,25]
+    Groupe 5 [1,9,12,20,24]
+Semaine 3
+    Groupe 1 [7,9,14,16,22]
+    Groupe 2 [6,11,12,18,21]
+    Groupe 3 [3,4,10,20,23]
+    Groupe 4 [2,5,15,17,24]
+    Groupe 5 [1,8,13,19,25]
+Semaine 4
+    Groupe 1 [7,11,15,20,25]
+    Groupe 2 [6,10,14,19,24]
+    Groupe 3 [5,9,13,18,23]
+    Groupe 4 [4,8,12,17,22]
+    Groupe 5 [1,2,3,16,21]
+Semaine 5
+    Groupe 1 [21, 22, 23, 24, 25]
+    Groupe 2 [16, 17, 18, 19, 20]
+    Groupe 3 [3,12,13,14,15]
+    Groupe 4 [2,8,9,10,11]
+    Groupe 5 [1,4,5,6,7]
+----------
+Finished in 2s 982msec
+
+
 FD
 OPTIMAL
 Semaine 1
