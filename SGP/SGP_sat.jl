@@ -1,11 +1,3 @@
-# exemple de format dimacs
-#c  simple_v3_c2.cnf
-#c
-#p cnf 3 2 # 3 var 2 clauses
-#1 -3 0 # x1 et non x3 0 veut dire fin de ligne
-#2 3 -1 0
-
-
 w = 4
 g = 4
 p = 4
@@ -60,8 +52,17 @@ function enumar(f,ii1,jj,k,n,sign)
 	end
 end
 
+function greedy_premiere_semaine(f)
+	k = 1
+	for kk in 1:g, j in 1:g
+		write(f,string(pla(1,j,k)," 0 \n"));println(alp(pla(1,j,k)),"   ")
+		k+=1
+	end
+end
+
 function sat(w,g,p,q)
 	open("satsgp.cnf","w") do f
+	greedy_premiere_semaine(f)
 	# ctr 1
 	for i in 1:w, k in 1:q
 		s = ""
@@ -93,59 +94,3 @@ function sat(w,g,p,q)
 end
 
 sat(w,g,p,q)
-
-
-function satold(w,g,p,q)
-	open("satsgp.cnf","w") do f
-	# ctr 1
-	for i in 1:w
-		for k in 1:q
-			s = ""
-			for j in 1:g
-				s = s*string(pla(i,j,k)," ")
-			end
-			s = s*"0"
-			write(f,s*"\n")
-		end
-	end
-	for i in 1:w
-		for j in 1:g-1
-			for jj in j+1:g
-				for k in 1:q
-					write(f,string("-",pla(i,j,k)," -",pla(i,jj,k)," 0\n"))
-				end
-			end
-		end
-	end
-
-	# ctr 2
-	for ii in 1:w
-		for jj in 1:g
-			enumar(f,ii,jj,q-p+1,q,true)
-		end
-	end
-	for ii in 1:w
-		for jj in 1:g
-			enumar(f,ii,jj,p+1,q,false)
-		end
-	end
-
-	# ctr 3
-	for k in 1:q-1
-		for kk in k+1:q
-			for i in 1:w
-				for ii in 1:w
-					for j in 1:g
-						for jj in 1:g
-							if jj != j || ii!=i
-								write(f,string("-",pla(i,j,k)," -",pla(i,j,kk)," -",pla(ii,jj,k)," -",pla(ii,jj,kk)," 0\n"))
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-	end
-end
-

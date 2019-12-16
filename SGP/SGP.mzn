@@ -1,9 +1,9 @@
 
 include "alldifferent.mzn";
 
-int: ww = 7; %nb semaines
+int: ww = 5; %nb semaines
 int: gg = 5; %nb groupes dans une semaine
-int: pp = 3; %nb joueurs dans un groupe
+int: pp = 5; %nb joueurs dans un groupe
 
 int : n = gg*pp; %nombre de joueurs diférents
 int : k = pp;
