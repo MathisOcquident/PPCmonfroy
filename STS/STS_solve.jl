@@ -68,9 +68,25 @@ function beau_print_res(matrice::Array{Array{Int, 1}, 2})
     end
 end
 
+function greedy_premiere_semaine!(liste_var::Array{Variable, 1}, n::Int)
+    n_semaine = n-1
+    n_terrain = Int(n/2)
+    s1 = 1
+    s2 = 2
+    terrain = 0
+    for equipe in 1:n
+        if equipe % 2 != 0
+            terrain += 1
+        end
+        ajouter!(liste_var[pla(s1, terrain, n)], equipe)
+    end
+    return nothing
+end
+
 # n : nombre d'équipes
 function solve_STS(n::Int)
     liste_var, liste_ctr = genere_contrainte_STS(n)
+    #greedy_premiere_semaine!(liste_var, n)
     println("branch_and_bound")
     @time faisable = branch_and_bound!(liste_var, liste_ctr)
     println(faisable ? "faisable" : "infaisable")
@@ -88,5 +104,6 @@ solve_STS(6)
  2 : 0.000119 seconds faisable
  4 : 0.057985 seconds infaisable
  6 : 0.185042 seconds faisable
+ 8 : 87.801295 seconds faisable
 
 =#
