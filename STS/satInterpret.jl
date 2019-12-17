@@ -26,7 +26,7 @@ function interpret()
 	open("res.out") do f
 		s = readlines(f)
 		println(s[1])
-		if s[1] == "SAT"
+		if s[1] == "SAT" || s[1] == "sat"
 			s = split(s[2]," ")
 			for i in 1:size(s,1)
 				ss[i]=parse(Int,s[i])
@@ -43,7 +43,7 @@ function interpret()
 			for i in 1:w
 				println("Semaine ",i)
 				for j in 1:g
-					println("    Match ",j,"  ",x[i,j,:])
+					println("    terrain ",j," : ",findall(isodd,x[i,j,:]))
 				end
 			end
 		end

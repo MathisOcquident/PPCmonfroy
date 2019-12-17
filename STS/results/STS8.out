@@ -1,3 +1,120 @@
+FD
+  3.760724 seconds (73.29 k allocations: 3.480 MiB)
+Semaine 1
+    terrain 1 : [1, 2]
+    terrain 2 : [3, 4]
+    terrain 3 : [5, 6]
+    terrain 4 : [7, 8]
+Semaine 2
+    terrain 1 : [6, 7]
+    terrain 2 : [5, 8]
+    terrain 3 : [2, 3]
+    terrain 4 : [1, 4]
+Semaine 3
+    terrain 1 : [3, 6]
+    terrain 2 : [4, 7]
+    terrain 3 : [2, 8]
+    terrain 4 : [1, 5]
+Semaine 4
+    terrain 1 : [3, 8]
+    terrain 2 : [1, 6]
+    terrain 3 : [4, 5]
+    terrain 4 : [2, 7]
+Semaine 5
+    terrain 1 : [5, 7]
+    terrain 2 : [1, 3]
+    terrain 3 : [4, 8]
+    terrain 4 : [2, 6]
+Semaine 6
+    terrain 1 : [1, 8]
+    terrain 2 : [2, 5]
+    terrain 3 : [3, 7]
+    terrain 4 : [4, 6]
+Semaine 7
+    terrain 1 : [2, 4]
+    terrain 2 : [6, 8]
+    terrain 3 : [1, 7]
+    terrain 4 : [3, 5]
+
+
+SAT
+z3
+	0.01 sec
+Semaine 1
+    terrain 1 : [1, 2]
+    terrain 2 : [3, 4]
+    terrain 3 : [5, 6]
+    terrain 4 : [7, 8]
+Semaine 2
+    terrain 1 : [6, 8]
+    terrain 2 : [1, 7]
+    terrain 3 : [3, 5]
+    terrain 4 : [2, 4]
+Semaine 3
+    terrain 1 : [5, 8]
+    terrain 2 : [2, 6]
+    terrain 3 : [4, 7]
+    terrain 4 : [1, 3]
+Semaine 4
+    terrain 1 : [6, 7]
+    terrain 2 : [4, 8]
+    terrain 3 : [2, 3]
+    terrain 4 : [1, 5]
+Semaine 5
+    terrain 1 : [4, 5]
+    terrain 2 : [3, 8]
+    terrain 3 : [1, 6]
+    terrain 4 : [2, 7]
+Semaine 6
+    terrain 1 : [1, 4]
+    terrain 2 : [5, 7]
+    terrain 3 : [2, 8]
+    terrain 4 : [3, 6]
+Semaine 7
+    terrain 1 : [3, 7]
+    terrain 2 : [2, 5]
+    terrain 3 : [1, 8]
+    terrain 4 : [4, 6]
+
+minisat
+	0.032834 sec
+Semaine 1
+    terrain 1 : [1, 2]
+    terrain 2 : [3, 4]
+    terrain 3 : [5, 6]
+    terrain 4 : [7, 8]
+Semaine 2
+    terrain 1 : [2, 8]
+    terrain 2 : [6, 7]
+    terrain 3 : [1, 4]
+    terrain 4 : [3, 5]
+Semaine 3
+    terrain 1 : [4, 7]
+    terrain 2 : [2, 3]
+    terrain 3 : [5, 8]
+    terrain 4 : [1, 6]
+Semaine 4
+    terrain 1 : [1, 5]
+    terrain 2 : [4, 8]
+    terrain 3 : [2, 7]
+    terrain 4 : [3, 6]
+Semaine 5
+    terrain 1 : [5, 7]
+    terrain 2 : [6, 8]
+    terrain 3 : [1, 3]
+    terrain 4 : [2, 4]
+Semaine 6
+    terrain 1 : [4, 6]
+    terrain 2 : [2, 5]
+    terrain 3 : [3, 7]
+    terrain 4 : [1, 8]
+Semaine 7
+    terrain 1 : [3, 8]
+    terrain 2 : [1, 7]
+    terrain 3 : [2, 6]
+    terrain 4 : [4, 5]
+
+
 B&B
   time 87.801295 seconds
 Semaine 1

@@ -1,4 +1,4 @@
-n = 6
+n = 12
 w = n-1
 g = div(n,2)
 q = n
@@ -10,8 +10,17 @@ function zpla(i,j,k,kk)
 	return pla(w,g,q) + i + w*(j-1) + w*g*(k-1) + w*g*w*g*(kk-1)
 end 
 
+function s1(f)# glouton pour fixer la première semaine
+	k = 1
+	for j in 1:div(n,2), kk in 1:2
+		write(f,string(pla(1,j,k)," 0\n"))
+		k+=1
+	end
+end
+
 function sat(w,g,q)
 	open("satsts.cnf","w") do f
+	s1(f)
 	# ctr 1
 	for i in 1:w, j in 1:g, kk in 1:q
 		s = ""
