@@ -2,7 +2,7 @@
 include "alldifferent.mzn";
 
 int: ww = 5; %nb semaines
-int: gg = 5; %nb groupes dans une semaine
+int: gg = 6; %nb groupes dans une semaine
 int: pp = 5; %nb joueurs dans un groupe
 
 int : n = gg*pp; %nombre de joueurs diférents
@@ -48,6 +48,14 @@ constraint forall(g in G)(card(array_intersect(t[S,g])) <=1);
 
 %contraintes sym 
 %constraint forall(s in S,g in G,g2 in G where g<g2)();
+  
+% on fixe la 1ere semaine
+constraint forall(i in G, j in S)(((i-1)*pp + j) in t[1,i]);
+% on fixe le 1er groupe de la 2eme semaines
+constraint forall(i in S)(((i-1)*pp + 1) in t[2,1]);
+%  les 1er joueurs de chaque groupes sont fixés
+constraint forall(w in 2..ww, p in S)(p in t[w,p]);
+
 
 solve satisfy;
 
