@@ -1,7 +1,7 @@
 include "alldifferent.mzn";
+int: mm = 5;
+int: n = mm*2;
 
-% Use this editor as a MiniZinc scratch book
-int: n = 8;
 
 set of int: J = 1..(n div 2); % terrain 
 set of int: I = 1..n-1; % semaine
@@ -27,6 +27,9 @@ constraint alldifferent(t[I,J]);
 % ça aide pour la resolution !! <3 <3 
 constraint forall(j in J)(card(array_union(t[I,j])) = n); 
 
+% on fixe les joueurs de la 1ere semaine
+constraint forall(j in J,i in I)(j in t[1,j]); 
+constraint forall(j in J,i in I)(j+mm in t[1,j]); 
 
 solve satisfy;
 
