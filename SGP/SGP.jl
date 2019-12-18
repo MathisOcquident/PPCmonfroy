@@ -25,9 +25,9 @@ function IP(w,g,p,q)
 	return m
 end
 
-w = 5
-g = 5
-p = 5
+w = 4
+g = 4
+p = 4
 q = g*p
 
 m = IP(w,g,p,q)

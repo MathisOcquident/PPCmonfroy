@@ -21,23 +21,21 @@ function IP(n)
 	return m
 end
 
-function main(n::Int=6)
-	println("n = ", n)
-	m = IP(n)
+n=8
 
-	@time optimize!(m)
-	term = termination_status(m)
+println("n = ", n)
+m = IP(n)
+@time optimize!(m)
+term = termination_status(m)
 
-	if term == MathOptInterface.OPTIMAL
-		x = value.(m[:x])
-
-		for i in 1:n-1
-			println("Semaine ",i)
-			for j in 1:div(n,2)
-				println("    terrain ",j," : ",findall(isodd,map(Int,x[i,j,:])))
-			end
+if term == MathOptInterface.OPTIMAL
+	x = value.(m[:x])
+	for i in 1:n-1
+		println("Semaine ",i)
+		for j in 1:div(n,2)
+			println("    terrain ",j," : ",findall(isodd,map(Int,x[i,j,:])))
 		end
 	end
 end
 
-main(10)
+

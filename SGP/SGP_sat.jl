@@ -55,7 +55,7 @@ end
 function greedy_premiere_semaine(f)
 	k = 1
 	for kk in 1:g, j in 1:g
-		write(f,string(pla(1,j,k)," 0 \n"));println(alp(pla(1,j,k)),"   ")
+		write(f,string(pla(1,j,k)," 0 \n"))
 		k+=1
 	end
 end
