@@ -225,6 +225,7 @@ function branch_and_bound!(liste_variables::Array{Variable, 1}, liste_contrainte
                     liste_variables[i] = liste_variables_temp[i]
                 end
             else
+                faisable_temp = branch_and_bound!(liste_variables, liste_contraintes)
                 faisable = faisable_temp # pas faisable
             end
         end
