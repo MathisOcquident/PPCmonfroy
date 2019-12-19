@@ -1,12 +1,6 @@
 # Projet de PPC
 Université de Nantes - Master 2 ORO - Année 2019/2020.
 
-* Package julia à installer pour le modèle FD:
-```
-using DataFrames,CSV,DelimitedFiles,JuMP
-```
-
-
 ## Structure générale du dossier
 ```
 Rapport.pdf       - Rapport du projet
