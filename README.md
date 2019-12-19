@@ -7,7 +7,7 @@ using DataFrames,CSV,DelimitedFiles,JuMP
 ```
 
 
-## Structure générale du dossier à respecter
+## Structure générale du dossier
 ```
 Rapport.pdf       - Rapport du projet
 Presentation.pdf  - Présentation
@@ -48,6 +48,7 @@ README.md
 
 
 **Commandes d'éxécutions**
+
 Pour les modèles Ensembliste, il suffit d’ouvrir les fichiers dans minizinc pour les exécuter.
 
 ```SGP.mzn```
